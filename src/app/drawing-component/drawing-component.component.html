@@ -1,1 +1,12 @@
-<p>drawing-component works!</p>
+
+  <div class="blackboard">
+    <div class="color-picker-container">
+        <label for="colorPicker" class="color-picker-label">Select Color:</label>
+        <input type="color" #colorPicker (change)=" onColorChange()" id="colorPicker" class="color-picker">
+    </div>
+    <canvas #canvas
+    (mousedown)="onMouseDown($event)"
+    (mousemove)="onMouseMove($event)"
+   ></canvas>
+</div>
+<button routerLink="/show">Show</button>

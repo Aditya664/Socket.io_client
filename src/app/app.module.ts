@@ -3,18 +3,19 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DrawingComponentComponent } from './drawing-component/drawing-component.component';
+import { SocketService } from './socket.service';
+import { DrawingComponent } from './drawing-component/drawing-component.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DrawingComponentComponent
-  ],
+    DrawingComponent,
+   ],
   imports: [
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [SocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
