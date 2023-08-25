@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path: 'draw',
     component: DrawingComponent
-  }
+  },
   {
     path: '',
     redirectTo: 'draw', // Default route

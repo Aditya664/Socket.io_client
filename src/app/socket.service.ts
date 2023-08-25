@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class SocketService {
   private socket: any;
   private data:any;
-  private url = 'http://localhost:3000'; 
+  private url = 'https://darling-douhua-369796.netlify.app'; 
 
   constructor() {
     this.socket = io(this.url);

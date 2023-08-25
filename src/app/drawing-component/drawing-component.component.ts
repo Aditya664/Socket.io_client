@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './drawing-component.component.html',
   styleUrls: ['./drawing-component.component.css'],
 })
-export class DrawingComponent implements OnInit,OnDestroy {
+export class DrawingComponent implements OnInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvas!: ElementRef;
   @ViewChild('colorPicker', { static: true }) colorPicker!: ElementRef<HTMLInputElement>;
   private context!: CanvasRenderingContext2D;
@@ -19,24 +19,26 @@ export class DrawingComponent implements OnInit,OnDestroy {
   private lastY = 0;
   private currentColor = 'black';
 
-  constructor(private socketService: SocketService,private router:Router) {}
+  constructor(private socketService: SocketService, private router: Router) { }
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe()
   }
+
   ngOnInit(): void {
     this.context = this.canvas.nativeElement.getContext('2d');
-    this.canvas.nativeElement.width  = 400;
-    this.canvas.nativeElement.height  = 400
+    this.canvas.nativeElement.width = 400;
+    this.canvas.nativeElement.height = 400
     this.subscription.add(
-    this.socketService.getDrawing().subscribe((data: any) => {
-      console.log(data)
-      this.drawOnCanvas(data);
-    })
+      this.socketService.getDrawing().subscribe((data: any) => {
+        console.log(data)
+        this.drawOnCanvas(data);
+      })
     );
   }
 
 
-  onShow(){
+  onShow() {
     this.router.navigate(['show'])
   }
 
@@ -60,21 +62,21 @@ export class DrawingComponent implements OnInit,OnDestroy {
     this.drawing = true;
     this.lastX = event.clientX - this.canvas.nativeElement.offsetLeft;
     this.lastY = event.clientY - this.canvas.nativeElement.offsetTop;
-this.subscription.add(
-    this.socketService.sendDrawing({
-      x: this.lastX,
-      y: this.lastY,
-      type: 'start',
-      color: this.currentColor,
-    }))
+    this.subscription.add(
+      this.socketService.sendDrawing({
+        x: this.lastX,
+        y: this.lastY,
+        type: 'start',
+        color: this.currentColor,
+      }))
 
     this.subscription.add(
-    this.drawOnCanvas({
-      x: this.lastX,
-      y: this.lastY,
-      type: 'start',
-      color: this.currentColor,
-    }))
+      this.drawOnCanvas({
+        x: this.lastX,
+        y: this.lastY,
+        type: 'start',
+        color: this.currentColor,
+      }))
   }
 
   onMouseMove(event: MouseEvent): void {
@@ -91,18 +93,23 @@ this.subscription.add(
     });
 
     this.subscription.add(
-    this.socketService.sendDrawing({
-      x: currentX,
-      y: currentY,
-      type: 'move',
-      color: this.currentColor,
-    }))
+      this.socketService.sendDrawing({
+        x: currentX,
+        y: currentY,
+        type: 'move',
+        color: this.currentColor,
+      }))
 
     this.lastX = currentX;
     this.lastY = currentY;
   }
 
- 
+  onMouseUp(event: MouseEvent): void {
+    if (this.drawing) {
+      this.drawing = false;
+      this.socketService.sendDrawing({ type: 'end' });
+    }
+  }
 
   onColorChange(): void {
     this.currentColor = this.colorPicker.nativeElement.value;
